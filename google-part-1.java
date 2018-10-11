@@ -1,4 +1,4 @@
-// 681. Next Closest Time
+// 1 // 681. Next Closest Time
 // Given a time represented in the format "HH:MM", form the next closest time by reusing the current digits. There is no limit on how many times a digit can be reused.
 class Solution {
     
@@ -45,7 +45,7 @@ class Solution {
     }
 }
 
-// 683. K Empty Slots
+// 2 // 683. K Empty Slots
 // There is a garden with N slots. In each slot, there is a flower. The N flowers will bloom one by one in N days. In each day, there will be exactly one flower blooming and it will be in the status of blooming since then.
 // Given an array flowers consists of number from 1 to N. Each number in the array represents the place where the flower will open in that day.
 // For example, flowers[i] = x means that the unique flower that blooms at day i will be at position x, where i and x will be in the range from 1 to N.
@@ -68,7 +68,7 @@ class Solution {
     }
 }
 
-// 159. Longest Substring with At Most Two Distinct Characters
+// 3 // 159. Longest Substring with At Most Two Distinct Characters
 // Given a string s , find the length of the longest substring t  that contains at most 2 distinct characters.
 class Solution {
     public int lengthOfLongestSubstringTwoDistinct(String s) {
@@ -107,7 +107,7 @@ class Solution {
     }
 }
 
-// 399. Evaluate Division
+// 4 // 399. Evaluate Division
 // Equations are given in the format A / B = k, where A and B are variables represented as strings, and k is a real number (floating point number). Given some queries, return the answers. If the answer does not exist, return -1.0.
 class Solution {
     class Pair{
@@ -166,7 +166,7 @@ class Solution {
     }
 }
 
-// 843. Guess the Word
+// 5 // 843. Guess the Word
 // This problem is an interactive problem new to the LeetCode platform.
 // We are given a word list of unique words, each word is 6 letters long, and one word in this list is chosen as secret.
 // You may call master.guess(word) to guess a word.  The guessed word should have type string and must be from the original list with 6 lowercase letters.
@@ -226,7 +226,7 @@ class Solution {
     }
 }
 
-// 857. Minimum Cost to Hire K Workers
+// 6 // 857. Minimum Cost to Hire K Workers
 // There are N workers.  The i-th worker has a quality[i] and a minimum wage expectation wage[i].
 // Now we want to hire exactly K workers to form a paid group.  When hiring a group of K workers, we must pay them according to the following rules:
 // Every worker in the paid group should be paid in the ratio of their quality compared to other workers in the paid group.
@@ -253,7 +253,7 @@ class Solution {
     }
 }
 
-// 844. Backspace String Compare
+// 7 // 844. Backspace String Compare
 // Given two strings S and T, return if they are equal when both are typed into empty text editors. # means a backspace character.
 class Solution {
     public boolean backspaceCompare(String S, String T) {
@@ -277,7 +277,7 @@ class Solution {
     }
 }
 
-// 904. Fruit Into Baskets
+// 8 // 904. Fruit Into Baskets
 // In a row of trees, the i-th tree produces fruit with type tree[i].
 // You start at any tree of your choice, then repeatedly perform the following steps:
 // Add one piece of fruit from this tree to your baskets.  If you cannot, stop.
@@ -322,7 +322,7 @@ class Solution {
     }
 }
 
-// 489. Robot Room Cleaner
+// 9 // 489. Robot Room Cleaner
 // Given a robot cleaner in a room modeled as a grid.
 // Each cell in the grid can be empty or blocked.
 // The robot cleaner with 4 given APIs can move forward, turn left or turn right. Each turn it made is 90 degrees.
@@ -389,7 +389,7 @@ class Solution {
     }
 }
 
-// 803. Bricks Falling When Hit
+// 10 // 803. Bricks Falling When Hit
 // We have a grid of 1s and 0s; the 1s in a cell represent bricks.  A brick will not drop if and only if it is directly connected to the top of the grid, or at least one of its (4-way) adjacent bricks will not drop.
 // We will do some erasures sequentially. Each time we want to do the erasure at the location (i, j), the brick (if it exists) on that location will disappear, and then some other bricks may drop because of that erasure.
 // Return an array representing the number of bricks that will drop after each erasure in sequence.
@@ -487,7 +487,7 @@ class Solution {
     }
 }
 
-// 686. Repeated String Match
+// 11 // 686. Repeated String Match
 // Given two strings A and B, find the minimum number of times A has to be repeated such that B is a substring of it. If no such solution, return -1.
 // For example, with A = "abcd" and B = "cdabcdab".
 // Return 3, because by repeating A three times (“abcdabcdabcd”), B is a substring of it; and B is not a substring of A repeated two times ("abcdabcd").
@@ -517,7 +517,7 @@ class Solution {
     }
 }
 
-//299. Bulls and Cows
+// 12 //299. Bulls and Cows
 //You are playing the following Bulls and Cows game with your friend: You write down a number and ask your friend to guess what the number is. Each time your friend makes a guess, you provide a hint that indicates how many digits in said guess match your secret number exactly in both digit and position (called "bulls") and how many digits match the secret number but locate in the wrong position (called "cows"). Your friend will use successive guesses and hints to eventually derive the secret number.
 //Write a function to return a hint according to the secret number and friend's guess, use A to indicate the bulls and B to indicate the cows. 
 //Please note that both secret number and friend's guess may contain duplicate digits.
@@ -544,7 +544,7 @@ public:
     }
 };
 
-//562. Longest Line of Consecutive One in Matrix （这道题没做，贴的是discussion里面点赞高的答案）
+// 13 //562. Longest Line of Consecutive One in Matrix （这道题没做，贴的是discussion里面点赞高的答案）
 /*Given a 01 matrix M, find the longest line of consecutive one in the matrix. The line could be horizontal, vertical, diagonal or anti-diagonal.
 Example:
 Input:
@@ -572,7 +572,7 @@ public int longestLine(int[][] M) {
     return max;
 }
 
-//135. Candy
+// 14 //135. Candy
 /*There are N children standing in a line. Each child is assigned a rating value.
 You are giving candies to these children subjected to the following requirements:
 Each child must have at least one candy.
@@ -603,7 +603,7 @@ class Solution {
     }
 }
 
-//308. Range Sum Query 2D - Mutable
+// 15 //308. Range Sum Query 2D - Mutable
 //Given a 2D matrix matrix, find the sum of the elements inside the rectangle defined by its upper left corner (row1, col1) and lower right corner (row2, col2).
 class NumMatrix {
     
@@ -656,6 +656,7 @@ class NumMatrix {
     }
 }
 
+// 16 
 /**
  * Your NumMatrix object will be instantiated and called as such:
  * NumMatrix obj = new NumMatrix(matrix);
@@ -687,7 +688,7 @@ class Solution {
     }
 }
 
-// 403. Frog Jump
+// 17 // 403. Frog Jump
 // A frog is crossing a river. The river is divided into x units and at each unit there may or may not exist a stone. The frog can jump on a stone, but it must not jump into the water.
 // Given a list of stones' positions (in units) in sorted ascending order, determine if the frog is able to cross the river by landing on the last stone. Initially, the frog is on the first stone and assume the first jump must be 1 unit.
 // If the frog's last jump was k units, then its next jump must be either k - 1, k, or k + 1 units. Note that the frog can only jump in the forward direction.
@@ -719,7 +720,7 @@ class Solution {
 }
 
 
-// 465. Optimal Account Balancing
+// 18 // 465. Optimal Account Balancing
 // A group of friends went on holiday and sometimes lent each other money. For example, Alice paid for Bill's lunch for $10. Then later Chris gave Alice $5 for a taxi ride. We can model each transaction as a tuple (x, y, z) which means person x gave person y $z. Assuming Alice, Bill, and Chris are person 0, 1, and 2 respectively (0, 1, 2 are the person's ID), the transactions can be represented as [[0, 1, 10], [2, 0, 5]].
 // Given a list of transactions between a group of people, return the minimum number of transactions required to settle the debt.
 // Note:
@@ -780,7 +781,7 @@ class Solution {
     }
 }
 
-// 642. Design Search Autocomplete System
+// 19 // 642. Design Search Autocomplete System
 // Design a search autocomplete system for a search engine. Users may input a sentence (at least one word and end with a special character '#'). For each character they type except '#', you need to return the top 3 historical hot sentences that have prefix the same as the part of sentence already typed. Here are the specific rules:
 // The hot degree for a sentence is defined as the number of times a user typed the exactly same sentence before.
 // The returned top 3 hot sentences should be sorted by hot degree (The first is the hottest one). If several sentences have the same degree of hot, you need to use ASCII-code order (smaller one appears first).
@@ -875,5 +876,50 @@ public class AutocompleteSystem {
  * List<String> param_1 = obj.input(c);
  */
 
+// 428. Serialize and Deserialize N-ary Tree
+// Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
+// Design an algorithm to serialize and deserialize an N-ary tree. An N-ary tree is a rooted tree in which each node has no more than N children. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that an N-ary tree can be serialized to a string and this string can be deserialized to the original tree structure.
+class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(Node root) {
+        List<String> list=new LinkedList<>();
+        serializeHelper(root,list);
+        return String.join(",",list);
+    }
+    
+    private void serializeHelper(Node root, List<String> list){
+        if(root==null){
+            return;
+        }else{
+            list.add(String.valueOf(root.val));
+            list.add(String.valueOf(root.children.size()));
+            for(Node child:root.children){
+                serializeHelper(child,list);
+            }
+        }
+    }
+
+    // Decodes your encoded data to tree.
+    public Node deserialize(String data) {
+        if(data.isEmpty())
+            return null;
+        
+        String[] ss=data.split(",");
+        Queue<String> q=new LinkedList<>(Arrays.asList(ss));
+        return deserializeHelper(q);
+    }
+    
+    private Node deserializeHelper(Queue<String> q){
+        Node root=new Node();
+        root.val=Integer.parseInt(q.poll());
+        int size=Integer.parseInt(q.poll());
+        root.children=new ArrayList<Node>(size);
+        for(int i=0;i<size;i++){
+            root.children.add(deserializeHelper(q));
+        }
+        return root;
+    }
+}
 
 
