@@ -665,6 +665,215 @@ class NumMatrix {
 
 
 
+// 1. Two Sum
+// Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+// You may assume that each input would have exactly one solution, and you may not use the same element twice.
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        int[] res = new int[2];
+        if(nums == null || nums.length == 0) return res;
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < nums.length; i++){
+            if(map.containsKey(target - nums[i])){
+                res[0] =map.get(target - nums[i]);
+                res[1] = i;
+                return res;
+            }
+            else{
+                map.put(nums[i], i);
+            }
+        }
+        return res;
+    }
+}
+
+// 403. Frog Jump
+// A frog is crossing a river. The river is divided into x units and at each unit there may or may not exist a stone. The frog can jump on a stone, but it must not jump into the water.
+// Given a list of stones' positions (in units) in sorted ascending order, determine if the frog is able to cross the river by landing on the last stone. Initially, the frog is on the first stone and assume the first jump must be 1 unit.
+// If the frog's last jump was k units, then its next jump must be either k - 1, k, or k + 1 units. Note that the frog can only jump in the forward direction.
+// Note:
+// The number of stones is ≥ 2 and is < 1,100.
+// Each stone's position will be a non-negative integer < 231.
+// The first stone's position is always 0.
+class Solution {
+    public boolean canCross(int[] stones) {
+        Map<Integer, Set<Integer>> dp = new HashMap<>();
+        for(int stone : stones){
+            dp.put(stone, new HashSet<Integer>());
+        }
+        dp.get(0).add(1);
+       for(int stone : stones){
+           for(int step : dp.get(stone)){
+               int dis = step + stone;
+               if(dis == stones[stones.length-1]) return true;
+               if(dp.containsKey(dis)){
+                   Set<Integer> set = dp.get(dis);
+                   set.add(step);
+                   if(step > 1) set.add(step-1);
+                   set.add(step+1);
+               }
+           }
+       }
+       return false;
+    }
+}
+
+
+// 465. Optimal Account Balancing
+// A group of friends went on holiday and sometimes lent each other money. For example, Alice paid for Bill's lunch for $10. Then later Chris gave Alice $5 for a taxi ride. We can model each transaction as a tuple (x, y, z) which means person x gave person y $z. Assuming Alice, Bill, and Chris are person 0, 1, and 2 respectively (0, 1, 2 are the person's ID), the transactions can be represented as [[0, 1, 10], [2, 0, 5]].
+// Given a list of transactions between a group of people, return the minimum number of transactions required to settle the debt.
+// Note:
+// A transaction will be given as a tuple (x, y, z). Note that x ≠ y and z > 0.
+// Person's IDs may not be linear, e.g. we could have the persons 0, 1, 2 or we could also have the persons 0, 2, 6.
+class Solution {
+    public int minTransfers(int[][] trans) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < trans.length; i++){
+            int per1 = trans[i][0];
+            int per2 = trans[i][1];
+            int val = trans[i][2];
+            if(map.containsKey(per1)){
+                map.put(per1, map.get(per1) - val);
+            }
+            else{
+                map.put(per1, -val);
+            }
+            if(map.containsKey(per2)){
+                map.put(per2, map.get(per2) + val);
+            }else{
+                map.put(per2, val);
+            }
+        }
+        List<Integer> poslist = new ArrayList<>();
+        List<Integer> neglist = new ArrayList<>();
+        for(int x : map.keySet()){
+            if(map.get(x) < 0)
+                neglist.add(-map.get(x));
+            else
+                poslist.add(map.get(x));
+        }
+        int min = Integer.MAX_VALUE;
+       
+        Stack<Integer> psta = new Stack<>();
+        Stack<Integer> nsta = new Stack<>();
+        for(int i = 0; i < 1000; i++){
+            for(int x : poslist)psta.push(x);
+            for(int x : neglist)nsta.push(x);
+            int cur = 0;
+            while(!nsta.empty()){
+                int pos = psta.pop();
+                int neg = nsta.pop();
+                cur++;
+                if(pos == neg) continue;
+                if(pos > neg){
+                    psta.push(pos - neg);
+                }
+                else{
+                    nsta.push(neg-pos);
+                }
+            }
+            if(cur < min) min = cur;
+            Collections.shuffle(poslist);
+            Collections.shuffle(neglist);
+        }
+        return min;
+    }
+}
+
+// 642. Design Search Autocomplete System
+// Design a search autocomplete system for a search engine. Users may input a sentence (at least one word and end with a special character '#'). For each character they type except '#', you need to return the top 3 historical hot sentences that have prefix the same as the part of sentence already typed. Here are the specific rules:
+// The hot degree for a sentence is defined as the number of times a user typed the exactly same sentence before.
+// The returned top 3 hot sentences should be sorted by hot degree (The first is the hottest one). If several sentences have the same degree of hot, you need to use ASCII-code order (smaller one appears first).
+// If less than 3 hot sentences exist, then just return as many as you can.
+// When the input is a special character, it means the sentence ends, and in this case, you need to return an empty list.
+// Your job is to implement the following functions:
+// The constructor function:
+// AutocompleteSystem(String[] sentences, int[] times): This is the constructor. The input is historical data. Sentences is a string array consists of previously typed sentences. Times is the corresponding times a sentence has been typed. Your system should record these historical data.
+// Now, the user wants to input a new sentence. The following function will provide the next character the user types:
+// List<String> input(char c): The input c is the next character typed by the user. The character will only be lower-case letters ('a' to 'z'), blank space (' ') or a special character ('#'). Also, the previously typed sentence should be recorded in your system. The output will be the top 3 historical hot sentences that have prefix the same as the part of sentence already typed.
+
+public class AutocompleteSystem {
+    class TrieNode {
+        Map<Character, TrieNode> children;
+        Map<String, Integer> counts;
+        boolean isWord;
+        public TrieNode() {
+            children = new HashMap<Character, TrieNode>();
+            counts = new HashMap<String, Integer>();
+            isWord = false;
+        }
+    }
+    
+    class Pair {
+        String s;
+        int c;
+        public Pair(String s, int c) {
+            this.s = s; this.c = c;
+        }
+    }
+    
+    TrieNode root;
+    String prefix;
+    
+    
+    public AutocompleteSystem(String[] sentences, int[] times) {
+        root = new TrieNode();
+        prefix = "";
+        
+        for (int i = 0; i < sentences.length; i++) {
+            add(sentences[i], times[i]);
+        }
+    }
+    
+    private void add(String s, int count) {
+        TrieNode curr = root;
+        for (char c : s.toCharArray()) {
+            TrieNode next = curr.children.get(c);
+            if (next == null) {
+                next = new TrieNode();
+                curr.children.put(c, next);
+            }
+            curr = next;
+            curr.counts.put(s, curr.counts.getOrDefault(s, 0) + count);
+        }
+        curr.isWord = true;
+    }
+    
+    public List<String> input(char c) {
+        if (c == '#') {
+            add(prefix, 1);
+            prefix = "";
+            return new ArrayList<String>();
+        }
+        
+        prefix = prefix + c;
+        TrieNode curr = root;
+        for (char cc : prefix.toCharArray()) {
+            TrieNode next = curr.children.get(cc);
+            if (next == null) {
+                return new ArrayList<String>();
+            }
+            curr = next;
+        }
+        
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a, b) -> (a.c == b.c ? a.s.compareTo(b.s) : b.c - a.c));
+        for (String s : curr.counts.keySet()) {
+            pq.add(new Pair(s, curr.counts.get(s)));
+        }
+
+        List<String> res = new ArrayList<String>();
+        for (int i = 0; i < 3 && !pq.isEmpty(); i++) {
+            res.add(pq.poll().s);
+        }
+        return res;
+    }
+}
+
+/**
+ * Your AutocompleteSystem object will be instantiated and called as such:
+ * AutocompleteSystem obj = new AutocompleteSystem(sentences, times);
+ * List<String> param_1 = obj.input(c);
+ */
 
 
 
