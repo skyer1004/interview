@@ -922,4 +922,322 @@ class Codec {
     }
 }
 
+// 21 // 846. Hand of Straights （没做过）
+// Alice has a hand of cards, given as an array of integers.
+// Now she wants to rearrange the cards into groups so that each group is size W, and consists of W consecutive cards.
+// Return true if and only if she can.
+class Solution {
+    public boolean isNStraightHand(int[] hand, int W) {
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        for(int i : hand){
+            minHeap.add(i);
+        }
+        while(minHeap.size() != 0) {
+            int start = minHeap.poll();
+            for(int j = 1; j < W; j++){
+                if(minHeap.remove(start + j)) {
+                    continue;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+
+// 22 // 818. Race Car
+// Your car starts at position 0 and speed +1 on an infinite number line.  (Your car can go into negative positions.)
+// Your car drives automatically according to a sequence of instructions A (accelerate) and R (reverse).
+// When you get an instruction "A", your car does the following: position += speed, speed *= 2.
+// When you get an instruction "R", your car does the following: if your speed is positive then speed = -1 , otherwise speed = 1.  (Your position stays the same.)
+// For example, after commands "AAR", your car goes to positions 0->1->3->3, and your speed goes to 1->2->4->-1.
+class Solution {
+    public int racecar(int target) {
+        int[] dp = new int[10001];
+        for(int i=0; i <= 13; i++){
+            dp[(1<<i)-1] = i;
+        }
+        solve(target, dp);
+        return dp[target];
+    }
+    public int solve(int target, int[] dp){
+        if(dp[target] != 0) return dp[target];
+        int n = (int)(Math.log(target)/Math.log(2))+1;
+        //scenario 1
+        dp[target] = n + 1 + solve((1<<n) - 1 - target, dp);
+        //scenario 2
+        for(int m = 0; m < n-1; m++){
+            dp[target] = Math.min(dp[target], n + m + 1 + solve(target - (1<<n -1) + (1<<m), dp));
+        }
+        return dp[target];
+    }
+}
+
+// 23 // 205. Isomorphic Strings
+// Given two strings s and t, determine if they are isomorphic.
+// Two strings are isomorphic if the characters in s can be replaced to get t.
+// All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character but a character may map to itself.
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        if(s.length() != t.length()) return false;
+        int count = 1;
+        Map<Character, Integer> map1 = new HashMap<>();
+        Map<Character, Integer> map2 = new HashMap<>();
+        StringBuilder sb1 = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
+        for(char c : s.toCharArray()){
+            if(map1.containsKey(c)){
+                sb1.append(map1.get(c));
+            }
+            else{
+                map1.put(c, count);
+                sb1.append(count);
+                count++;
+            }
+        }
+        count = 1;
+        for(char c : t.toCharArray()){
+            if(map2.containsKey(c)){
+                sb2.append(map2.get(c));
+            }
+            else{
+                map2.put(c, count);
+                sb2.append(count);
+                count++;
+            }
+        }
+        return sb1.toString().equals(sb2.toString());
+    }
+}
+
+// 24 // 766. Toeplitz Matrix
+// A matrix is Toeplitz if every diagonal from top-left to bottom-right has the same element.
+// Now given an M x N matrix, return True if and only if the matrix is Toeplitz.
+class Solution {
+    public boolean isToeplitzMatrix(int[][] matrix) {
+        for(int i = 0; i < matrix.length; i++){
+            for(int j = 0; j < matrix[0].length; j++){
+                if(i-1 >= 0 && j-1>=0 && matrix[i][j] != matrix[i-1][j-1]) return false;
+                if(i+1 < matrix.length && j+1 < matrix[0].length && matrix[i][j] != matrix[i+1][j+1]) return false;
+            }
+        }
+        return true;
+    }
+}
+
+// 25 // 833. Find And Replace in String
+// To some string S, we will perform some replacement operations that replace groups of letters with new ones (not necessarily the same size).
+// Each replacement operation has 3 parameters: a starting index i, a source word x and a target word y.  The rule is that if x starts at position i in the original string S, then we will replace that occurrence of x with y.  If not, we do nothing.
+// For example, if we have S = "abcd" and we have some replacement operation i = 2, x = "cd", y = "ffff", then because "cd" starts at position 2 in the original string S, we will replace it with "ffff".
+// Using another example on S = "abcd", if we have both the replacement operation i = 0, x = "ab", y = "eee", as well as another replacement operation i = 2, x = "ec", y = "ffff", this second operation does nothing because in the original string S[2] = 'c', which doesn't match x[0] = 'e'.
+// All these operations occur simultaneously.  It's guaranteed that there won't be any overlap in replacement: for example, S = "abc", indexes = [0, 1], sources = ["ab","bc"] is not a valid test case.
+class Solution {
+    public String findReplaceString(String S, int[] index, String[] source, String[] targets) {
+       Map<Integer, Integer> map = new HashMap<>();
+       for(int i = 0; i < index.length; i++){
+           if(S.startsWith(source[i], index[i])){
+               map.put(index[i], i);
+           }
+       }
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < S.length();){
+            if(map.containsKey(i)){
+                sb.append(targets[map.get(i)]);
+                i+=source[map.get(i)].length();
+            }
+            else{
+                sb.append(S.charAt(i));
+                i++;
+            }
+        }
+        return sb.toString();
+    }
+}
+
+// 26 // 815. Bus Routes
+// We have a list of bus routes. Each routes[i] is a bus route that the i-th bus repeats forever. For example if routes[0] = [1, 5, 7], this means that the first bus (0-th indexed) travels in the sequence 1->5->7->1->5->7->1->... forever.
+// We start at bus stop S (initially not on a bus), and we want to go to bus stop T. Travelling by buses only, what is the least number of buses we must take to reach our destination? Return -1 if it is not possible.
+class Solution {
+    public int numBusesToDestination(int[][] routes, int S, int T) {
+        Map<Integer, Set<Integer>> map = new HashMap<>();
+        for(int i=0; i < routes.length; i++){
+           for(int j = 0; j < routes[i].length; j++){
+               if(map.containsKey(routes[i][j])){
+                   Set<Integer> list = map.get(routes[i][j]);
+                   list.add(i);
+                   map.put(routes[i][j], list);
+               }
+               else{
+                   Set<Integer> list = new HashSet<>();
+                   list.add(i);
+                   map.put(routes[i][j], list);
+               }
+           }
+        }
+        Set<Integer> visit = new HashSet<>();
+        Set<Integer> station = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        if(!map.containsKey(S)) return -1;
+        if(!map.containsKey(T)) return -1;
+        queue.offer(S);
+        int count = 0;
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            for(int i = 0; i < size; i++){
+                int cur = queue.poll();
+                if(!map.containsKey(cur))continue;
+                if(cur == T) return count;
+                Set<Integer> buses = map.get(cur);
+                for(int bus : buses){
+                    if(visit.contains(bus)) continue;
+                    visit.add(bus);
+                    for(int route : routes[bus]){
+                        if(station.contains(route)) continue;
+                        station.add(route);
+                        queue.offer(route);
+                    }
+                }
+            }
+            count++;
+        }
+        return -1;
+    }
+}
+
+// 27 // 849. Maximize Distance to Closest Person
+// In a row of seats, 1 represents a person sitting in that seat, and 0 represents that the seat is empty. 
+// There is at least one empty seat, and at least one person sitting.
+// Alex wants to sit in the seat such that the distance between him and the closest person to him is maximized. 
+// Return that maximum distance to closest person.
+class Solution {
+    public int maxDistToClosest(int[] seats) {
+        int count = 0;
+        int maxlen = 0;
+        if(seats[0] == 0){
+            int temp = 0;
+            while(seats[temp++] == 0) maxlen++;
+            maxlen*=2;
+        }
+        for(int x : seats){
+            if(x == 1){
+                if(count > maxlen) maxlen = count;
+                count = 0;
+            }
+            else count++;
+        }
+        if(count*2 > maxlen) maxlen = count*2;
+        if(maxlen%2 == 1) return maxlen/2+1;
+        else return maxlen/2;
+    }
+}
+
+// 28 // 774. Minimize Max Distance to Gas Station
+// On a horizontal number line, we have gas stations at positions stations[0], stations[1], ..., stations[N-1], where N = stations.length.
+// Now, we add K more gas stations so that D, the maximum distance between adjacent gas stations, is minimized.
+// Return the smallest possible value of D.
+class Solution {
+    public double minmaxGasDist(int[] stations, int K) {
+        Arrays.sort(stations);
+        PriorityQueue<Interval> queue = new PriorityQueue<>(new Comparator<Interval>(){
+            public int compare(Interval a, Interval b){
+                double diff = b.getDis() - a.getDis();
+                if(diff > 0) return 1;
+                if(diff < 0) return -1;
+                return 0;
+            }
+        });
+        int longest = stations[stations.length-1] - stations[0];
+        int remain = K;
+        for(int i = 0; i < stations.length-1; i++){
+            int insertNum = (int)(K*(((double)(stations[i+1] - stations[i]))/longest));
+            queue.offer(new Interval(stations[i], stations[i+1], insertNum));
+            remain -= insertNum;
+        }
+        while(remain > 0){
+            Interval temp = queue.poll();
+            temp.insertNum++;
+            remain--;
+            queue.offer(temp);
+        }
+        Interval last = queue.poll();
+        return last.getDis();
+    }
+    class Interval{
+        int left;
+        int right;
+        int insertNum;
+        Interval(int a, int b, int c){
+            left = a;
+            right = b;
+            insertNum = c;
+        }
+        public double getDis(){
+            return (right - left)/((double)(insertNum+1));
+        }
+    }
+}
+
+// 29 // 418. Sentence Screen Fitting
+// Given a rows x cols screen and a sentence represented by a list of non-empty words, find how many times the given sentence can be fitted on the screen.
+// Note:
+// A word cannot be split into two lines.
+// The order of words in the sentence must remain unchanged.
+// Two consecutive words in a line must be separated by a single space.
+// Total words in the sentence won't exceed 100.
+// Length of each word is greater than 0 and won't exceed 10.
+// 1 ≤ rows, cols ≤ 20,000.
+class Solution {
+    public int wordsTyping(String[] sentence, int rows, int cols) {
+        int n = sentence.length;
+        int[] dp = new int[n];
+        
+        for(int i = 0; i < n; i++) {
+            int length = 0, words = 0, index = i;
+            while(length + sentence[index % n].length() <= cols) {
+                length += sentence[index % n].length();
+                length += 1; // space
+                index++;
+                words++;
+            }
+            dp[i] = words;
+        }
+        
+        int words = 0;
+        for(int i = 0, index = 0; i < rows; i++) {
+            words += dp[index];
+            index = (dp[index] + index) % n;
+        }
+        
+        return words / n;
+    }
+}
+
+// 30 // 684. Redundant Connection
+// In this problem, a tree is an undirected graph that is connected and has no cycles.
+// The given input is a graph that started as a tree with N nodes (with distinct values 1, 2, ..., N), with one additional edge added. The added edge has two different vertices chosen from 1 to N, and was not an edge that already existed.
+// The resulting graph is given as a 2D-array of edges. Each element of edges is a pair [u, v] with u < v, that represents an undirected edge connecting nodes u and v.
+// Return an edge that can be removed so that the resulting graph is a tree of N nodes. If there are multiple answers, return the answer that occurs last in the given 2D-array. The answer edge [u, v] should be in the same format, with u < v.
+class Solution {
+    public int[] findRedundantConnection(int[][] edges) {
+        if(edges == null || edges.length == 0) return new int[2];
+        int[] father = new int[edges.length*2+1];
+        for(int i = 0; i < father.length; i++){
+            father[i] = i;
+        }
+        for(int[] edge : edges){
+            int fa1 = find(edge[0], father);
+            int fa2 = find(edge[1], father);
+            if(fa1 == fa2) return edge;
+            father[fa1] = fa2;
+        }
+        return new int[2];
+    }
+    public int find(int a, int[] father){
+        if(father[a] == a) return a;
+        return find(father[a], father);
+    }
+}
+
 
