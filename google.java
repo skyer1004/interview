@@ -517,6 +517,151 @@ class Solution {
     }
 }
 
+//299. Bulls and Cows
+//You are playing the following Bulls and Cows game with your friend: You write down a number and ask your friend to guess what the number is. Each time your friend makes a guess, you provide a hint that indicates how many digits in said guess match your secret number exactly in both digit and position (called "bulls") and how many digits match the secret number but locate in the wrong position (called "cows"). Your friend will use successive guesses and hints to eventually derive the secret number.
+//Write a function to return a hint according to the secret number and friend's guess, use A to indicate the bulls and B to indicate the cows. 
+//Please note that both secret number and friend's guess may contain duplicate digits.
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        map<char,int> index;
+        int bull=0;
+        int cow=0;
+        
+        for(int i=0;i<secret.size();i++){
+                if(secret[i]==guess[i])++bull;
+                ++index[secret[i]];
+                
+        }
+        for(int i=0;i<guess.size();i++){
+            if(index[guess[i]]){
+                cow++;
+                --index[guess[i]];
+            }
+        }
+        
+        return to_string(bull)+"A"+to_string(cow-bull)+"B";
+    }
+};
+
+//562. Longest Line of Consecutive One in Matrix （这道题没做，贴的是discussion里面点赞高的答案）
+/*Given a 01 matrix M, find the longest line of consecutive one in the matrix. The line could be horizontal, vertical, diagonal or anti-diagonal.
+Example:
+Input:
+[[0,1,1,0],
+ [0,1,1,0],
+ [0,0,0,1]]
+Output: 3
+*/
+public int longestLine(int[][] M) {
+    int n = M.length, max = 0;
+    if (n == 0) return max;
+    int m = M[0].length;
+    int[][][] dp = new int[n][m][4];
+    for (int i=0;i<n;i++) 
+        for (int j=0;j<m;j++) {
+            if (M[i][j] == 0) continue;
+            for (int k=0;k<4;k++) dp[i][j][k] = 1;
+            if (j > 0) dp[i][j][0] += dp[i][j-1][0]; // horizontal line
+            if (j > 0 && i > 0) dp[i][j][1] += dp[i-1][j-1][1]; // anti-diagonal line
+            if (i > 0) dp[i][j][2] += dp[i-1][j][2]; // vertical line
+            if (j < m-1 && i > 0) dp[i][j][3] += dp[i-1][j+1][3]; // diagonal line
+            max = Math.max(max, Math.max(dp[i][j][0], dp[i][j][1]));
+            max = Math.max(max, Math.max(dp[i][j][2], dp[i][j][3]));
+        }
+    return max;
+}
+
+//135. Candy
+/*There are N children standing in a line. Each child is assigned a rating value.
+You are giving candies to these children subjected to the following requirements:
+Each child must have at least one candy.
+Children with a higher rating get more candies than their neighbors.
+What is the minimum candies you must give?*/
+class Solution {
+    public int candy(int[] ratings) {
+        if(ratings == null || ratings.length == 0) return 0;
+        int pre = 1, total = 1, cd = 0;
+        for(int i = 1; i < ratings.length; i++){
+            if(ratings[i] >= ratings[i-1]){
+                if(cd > 0){
+                    total+= (cd+1)*cd/2;
+                    if(cd >= pre) total+= cd-pre+1;
+                    cd = 0;
+                    pre = 1;
+                }
+                pre = ratings[i] == ratings[i-1] ? 1 : pre+1;
+                total+=pre;
+            }
+            else cd++;
+        }
+        if(cd > 0){
+                    total+= (cd+1)*cd/2;
+                    if(cd >= pre) total+= cd-pre+1;
+                }
+        return total;
+    }
+}
+
+//308. Range Sum Query 2D - Mutable
+//Given a 2D matrix matrix, find the sum of the elements inside the rectangle defined by its upper left corner (row1, col1) and lower right corner (row2, col2).
+class NumMatrix {
+    
+    int[][] matrix;
+    int[][] dp;
+    public NumMatrix(int[][] matrix) {
+        this.matrix = matrix;
+        if(matrix == null || matrix.length == 0 || matrix[0].length == 0) dp = new int[0][0];
+        else{
+            dp = new int[matrix.length][matrix[0].length];
+            init();    
+        }
+        
+    }
+    
+    public void init(){
+        dp[0][0] = matrix[0][0];
+        for(int i = 1; i < matrix.length; i++){
+            dp[i][0] = dp[i-1][0] + matrix[i][0];
+        }
+        for(int j = 1; j < matrix[0].length; j++){
+            dp[0][j] = dp[0][j-1] + matrix[0][j];
+        }
+        for(int i = 1; i < matrix.length; i++){
+            for(int j = 1; j < matrix[0].length; j++){
+                dp[i][j] = dp[i-1][j] + dp[i][j-1] - dp[i-1][j-1] + matrix[i][j];
+            }
+        }
+    }
+    public void update(int row, int col, int val) {
+        if(matrix == null || matrix.length == 0 || matrix[0].length == 0) return;
+        int num = matrix[row][col];
+        matrix[row][col] = val;
+        int delta = val - num;
+        for(int i = row; i < matrix.length; i++){
+            for(int j = col; j < matrix[0].length;j++){
+                dp[i][j]+=delta;
+            }
+        }
+
+    }
+    
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+         if(matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+         int s2 = (row2>=0 && row2 < matrix.length && col2 >=0 && col2 < matrix[0].length)?dp[row2][col2]: 0;
+         int t1 = (row1 > 0 && row1 < matrix.length && col2 >=0 && col2 < matrix[0].length)?dp[row1-1][col2]: 0;
+         int t2 = (row2 >=0 && row2 < matrix.length && col1 > 0 && col1 < matrix[0].length)?dp[row2][col1-1]: 0;
+         int s1 = (row1 > 0 && row1 < matrix.length && col1 > 0 && col1 < matrix[0].length)?dp[row1-1][col1-1]: 0;
+         return s2-t1-t2+s1;
+    }
+}
+
+/**
+ * Your NumMatrix object will be instantiated and called as such:
+ * NumMatrix obj = new NumMatrix(matrix);
+ * obj.update(row,col,val);
+ * int param_2 = obj.sumRegion(row1,col1,row2,col2);
+ */
 
 
 
